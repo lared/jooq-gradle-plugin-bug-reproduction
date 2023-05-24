@@ -50,8 +50,4 @@ jooq {
 
 tasks.named('generateFirstJooq', JooqGenerate).configure {
     allInputsDeclared = true
-
-    generationToolNormalization = { configuration ->
-        logger.info(configuration)
-    }
 }

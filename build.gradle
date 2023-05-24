@@ -1,0 +1,21 @@
+plugins {
+    id "nu.studer.jooq" version "8.2" apply false
+}
+
+tasks.named("wrapper", Wrapper) {
+    gradleVersion("8.1.1")
+}
+
+subprojects {
+    apply plugin: "java-library"
+    apply plugin: "nu.studer.jooq"
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        jooqGenerator "org.jooq:jooq-meta-extensions-liquibase:3.18.4"
+    }
+}
+

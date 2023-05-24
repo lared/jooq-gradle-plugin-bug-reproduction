@@ -1,0 +1,57 @@
+import nu.studer.gradle.jooq.JooqEdition
+import nu.studer.gradle.jooq.JooqGenerate
+
+jooq {
+    edition = JooqEdition.OSS
+
+    configurations {
+        second {
+            generateSchemaSourceOnCompilation = true
+
+            generationTool {
+                logging = org.jooq.meta.jaxb.Logging.WARN
+                generator {
+                    name = 'org.jooq.codegen.DefaultGenerator'
+                    database {
+                        name = 'org.jooq.meta.extensions.liquibase.LiquibaseDatabase'
+                        inputSchema = ''
+                        properties {
+                            property {
+                                key = 'rootPath'
+                                value = "${projectDir}/src/main/resources"
+                            }
+                            property {
+                                key = 'scripts'
+                                value = "db/changelog/colleague_training/db.changelog-master.xml"
+                            }
+                            property {
+                                key = 'includeLiquibaseTables'
+                                value = false
+                            }
+                        }
+                    }
+                    generate {
+                        daos = true
+                        deprecated = false
+                        records = true
+                        immutablePojos = false
+                        fluentSetters = true
+                        pojosEqualsAndHashCode = true
+                    }
+                    target {
+                        packageName = 'test'
+                    }
+                    strategy.name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+                }
+            }
+        }
+    }
+}
+
+tasks.named('generateSecondJooq', JooqGenerate).configure {
+    allInputsDeclared = true
+
+    generationToolNormalization = { configuration ->
+        logger.info(configuration)
+    }
+}
